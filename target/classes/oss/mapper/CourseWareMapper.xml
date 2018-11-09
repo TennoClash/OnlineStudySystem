@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="oss.dao.CourseWareDao">
+<resultMap id="BaseResultMap" type="oss.entity.Courseware" >
+    <id column="courseware_id" property="coursewareId"/>
+    <result column="course_id" property="courseId"/>
+    <result column="courseware_name" property="coursewareName" jdbcType="VARCHAR" />
+    <result column="video_path" property="videoPath" jdbcType="VARCHAR" />
+    <result column="pic_path" property="picPath" jdbcType="VARCHAR" />
+    <result column="video_time" property="videoTime" jdbcType="VARCHAR" />
+    <result column="courseware_text" property="coursewareText" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="BaseResultMap2" type="oss.entity.User_BatchKey" >
+    <id column="batch_id" property="batchId" jdbcType="INTEGER" />
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+  </resultMap>
+   <resultMap id="BaseResultMap3" type="oss.entity.Batch_CourseKey" >
+    <id column="batch_id" property="batchId" jdbcType="INTEGER" />
+    <id column="course_id" property="courseId" jdbcType="INTEGER" />
+  </resultMap>
+    <resultMap id="BaseResultMap4" type="oss.entity.Course" >
+    <id column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="course_code" property="courseCode" jdbcType="VARCHAR" />
+    <result column="course_text" property="courseText" jdbcType="VARCHAR" />
+    <result column="course_state" property="courseState" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    	<select id="searchInvListC" parameterType="oss.entity.Page" resultMap="BaseResultMap">
+		select * from courseware limit #{startRow},#{pageSize}
+	</select>
+
+ <select id="searchTotalCountC" parameterType="oss.entity.Page"
+        resultType="java.lang.Integer">
+        select count(courseware_id) from courseware <where>
+            <if test="queryCondition!=null">
+                and courseware_name like CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+    </select>
+    
+    <select id="getInvBycondtionC" parameterType="oss.entity.Page" resultMap="BaseResultMap">
+        select * from courseware
+         <where>
+            <if test="queryCondition!=null">
+                 courseware_name like CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+      </select>
+      
+       <select id="isUserBatch" parameterType="oss.entity.User_BatchKey" resultMap="BaseResultMap2">
+        select * from user_batch where batch_id=#{batchId} and user_id=#{userId};
+      </select>
+      
+       <select id="getBatchCourse" parameterType="oss.entity.Batch_CourseKey" resultMap="BaseResultMap4">
+       select * from course where course_id in (select course_id from batch_course where  batch_id=#{batchId});
+      </select>
+      
+      <select id="getCourseWareByCourseId" parameterType="int" resultMap="BaseResultMap">
+       select * from courseware where course_id=#{course_id};
+      </select>
+      
+
+ <insert id="addCourseWare" parameterType="oss.entity.Courseware" >
+    insert into courseware (courseware_name, 
+      video_path, pic_path, video_time
+      )
+    values (#{coursewareName,jdbcType=VARCHAR}, 
+      #{videoPath,jdbcType=VARCHAR}, #{picPath,jdbcType=VARCHAR}, #{videoTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+   <insert id="addUserBatch" parameterType="oss.entity.User_BatchKey" >
+    insert into user_batch (batch_id, user_id) values (#{batchId}, #{userId})
+  </insert>
+  
+  <update id="updateCourseWare" parameterType="oss.entity.Courseware" >
+    update courseware
+    set course_id = #{courseId},
+      courseware_name = #{coursewareName,jdbcType=VARCHAR},
+      courseware_text = #{coursewareText}
+    where courseware_id = #{coursewareId}
+  </update>
+</mapper>

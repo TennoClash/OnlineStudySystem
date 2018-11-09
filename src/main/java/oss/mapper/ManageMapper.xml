@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="oss.dao.ManageDao">
+<resultMap id="BaseResultMap" type="oss.entity.User_Table" >
+    <id column="user_id" property="userId"/>
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="age" property="age" />
+    <result column="gender" property="gender" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="state" property="state"/>
+    <result column="user_type" property="userType" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMap2" type="oss.entity.Course" >
+    <id column="course_id" property="courseId"/>
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="course_code" property="courseCode" jdbcType="VARCHAR" />
+    <result column="course_text" property="courseText" jdbcType="VARCHAR" />
+    <result column="course_state" property="courseState"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+   <resultMap id="BaseResultMap3" type="oss.entity.Study_Batch" >
+    <id column="batch_id" property="batchId"/>
+    <result column="batch_name" property="batchName"/>
+    <result column="start_time" property="startTime" jdbcType="DATE" />
+    <result column="end_time" property="endTime" jdbcType="DATE" />
+    <result column="state" property="state"/>
+    <result column="batch_text" property="batchText" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMap4" type="oss.entity.Batch_CourseKey" >
+    <id column="batch_id" property="batchId" jdbcType="INTEGER" />
+    <id column="course_id" property="courseId" jdbcType="INTEGER" />
+  </resultMap>
+<select id="searchInvListT" parameterType="oss.entity.Page" resultMap="BaseResultMap">
+		select * from user_table limit #{startRow},#{pageSize}
+	</select>
+
+ <select id="searchTotalCountT" parameterType="oss.entity.Page"
+        resultType="java.lang.Integer">
+        select count(user_id) from user_table <where>
+            <if test="queryCondition!=null">
+                and real_name like CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+    </select>
+    
+    <select id="getInvBycondtionT" parameterType="oss.entity.Page" resultMap="BaseResultMap">
+        select * from user_table
+         <where>
+            <if test="queryCondition!=null">
+                 real_name like CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+      </select>
+ <update id="updateUser" parameterType="oss.entity.User_Table" >
+    update user_table
+    set user_name = #{userName,jdbcType=VARCHAR},
+      real_name = #{realName,jdbcType=VARCHAR},
+      age = #{age},
+      gender = #{gender},
+      email = #{email,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where user_name = #{userName}
+  </update>
+  
+   <update id="vPass" parameterType="String" >
+    update user_table set state =1 where user_name = #{id};
+  </update>
+
+
+<select id="searchInvListC" parameterType="oss.entity.Page" resultMap="BaseResultMap2">
+		select * from course limit #{startRow},#{pageSize}
+	</select>
+
+ <select id="searchTotalCountC" parameterType="oss.entity.Page"
+        resultType="java.lang.Integer">
+        select count(course_name) from course <where>
+            <if test="queryCondition!=null">
+                and course_name like CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+    </select>
+    
+    <select id="getInvBycondtionC" parameterType="oss.entity.Page" resultMap="BaseResultMap2">
+        select * from course
+         <where>
+            <if test="queryCondition!=null">
+                 course_name like CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+      </select>
+      
+      
+      
+      <insert id="addClazz" parameterType="oss.entity.Course" >
+    insert into course (course_name, course_code, 
+      course_text, course_state)
+    values (#{courseName,jdbcType=VARCHAR}, #{courseCode,jdbcType=VARCHAR}, 
+      #{courseText,jdbcType=VARCHAR},1)
+  		</insert>
+  
+  <insert id="addBatch" parameterType="oss.entity.Study_Batch" >
+     insert into study_batch (batch_name, start_time, 
+      end_time, state, batch_text)
+    values (#{batchName,jdbcType=VARCHAR}, #{startTime,jdbcType=DATE}, 
+      #{endTime,jdbcType=DATE},0, #{batchText,jdbcType=VARCHAR})
+  	</insert>
+  	
+  	
+  	
+  	<select id="searchInvListB" parameterType="oss.entity.Page" resultMap="BaseResultMap3">
+		select * from study_batch limit #{startRow},#{pageSize}
+	</select>
+
+ <select id="searchTotalCountB" parameterType="oss.entity.Page"
+        resultType="java.lang.Integer">
+        select count(batch_id) from study_batch <where>
+            <if test="queryCondition!=null">
+                and batch_name like CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+    </select>
+    
+    <select id="getInvBycondtionB" parameterType="oss.entity.Page" resultMap="BaseResultMap3">
+        select * from study_batch
+         <where>
+            <if test="queryCondition!=null">
+                 batch_name like CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+      </select>
+      
+      <update id="baOpen" parameterType="int">
+			update study_batch set state=1 where batch_id=#{id};
+		</update>
+	  <update id="baClose" parameterType="int">
+			update study_batch set state=0 where batch_id=#{id};
+		</update>
+
+	<select id="getCourse" resultMap="BaseResultMap2">
+        select * from course;
+    </select>
+    
+    <select id="getCourseByBatch" parameterType="int" resultMap="BaseResultMap4">
+        select * from batch_course where batch_id=#{batch_id};
+    </select>
+
+      
+</mapper>
