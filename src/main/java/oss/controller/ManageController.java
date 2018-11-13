@@ -32,6 +32,18 @@ public class ManageController {
 	public String studycourse() {
 		return "studycourse";
 	}
+	@RequestMapping("/testq")
+	public String testq() {
+		return "testq";
+	}
+	@RequestMapping("/adminrecord")
+	public String adminrecord() {
+		return "adminrecord";
+	}
+	@RequestMapping("/srecord")
+	public String srecord() {
+		return "srecord";
+	}
 	
 	@RequestMapping("/userma")
 	public String userMa() {

@@ -1,4 +1,5 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -10,12 +11,8 @@
 <meta name="author" content="ThemeBucket">
 <title>Welcome</title>
 <script src="/oss/plugin/script/jquery-1.10.2.min.js"></script>
-<script src="/oss/plugin/script/video.min.js"></script>
-<script src="/oss/plugin/script/jquery.stepy.js"></script>
 <link href="/oss/plugin/css/style.css" rel="stylesheet">
-<link href="/oss/plugin/css/jquery.stepy.css" rel="stylesheet">
 <link href="/oss/plugin/css/style-responsive.css" rel="stylesheet">
-<link href="/oss/plugin/css/video-js.min.css" rel="stylesheet">
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -83,146 +80,23 @@
 		      } 
 		      return false;
 		   });
-		var data1;
-		$.ajax({
-			url : "/oss/getWare",
-			data : {
-				id : getQueryString("courseId")
-			},
-			type : "post",
-			dataType : "json",
-			success : function(data) {
-				console.log(data);
-				data1=data;
-				$.each(data,function(i,v){
-					$("#gallery").append('<div class="images item"><a class="scourse" href="#"><img id="'+v.coursewareId+'" src="'+v.picPath+'" alt=""></a><p>'+v.coursewareName+'</p></div>')
-				}) 
-				 
-			},
-			error : function() { 
-				console.log("失败");   
-			}  
-		})   
-		var vvideo;
-		$("#gallery").on("click",".scourse",function(){  
-			var ii=Number($(this).children().attr("id")) 
-			$.each(data1,function(i,v){  
-				console.log(v.coursewareId)  
-				if(v.coursewareId==ii){ 
-					$("#ccenter").empty();
-					$("#ccenter").append('<video id="example_video_1" class="video-js vjs-default-skin vjs-big-play-centered"controls preload="none"poster="'+v.picPath+'" data-setup="{}"><source id="ssc" src="'+v.videoPath+'" /> </video>')
-					$("#example_video_1").height($(window).height()*0.8);
-					$("#example_video_1").width($(window).height()*0.8/0.75); 
-					vvideo=document.getElementById("example_video_1");
-					lister(vvideo,v.coursewareId); 
-				}
-				 
-			})  
-			$("#default-title-1").click(); 
-		})  
-		
-
-		} 
-	})
-	$(window).resize(function() {
-		$("#example_video_1").height($(window).height() * 0.8);
-		$("#example_video_1").width($(window).height() * 0.8 / 0.75);
-	});
-	
-	function lister(video,coursewareId) {
-		
-		video.addEventListener('play', function() {
-			console.log("play");
-			var userid = '<%=session.getAttribute("user_id")%>';
-			var batchId =getQueryString("batchId");
-			$.ajax({
-				url : "/oss/recordResume",
-				data : {
-					userid:userid,
-					batchId:batchId,
-					coursewareId:coursewareId
-				},
-				type : "post",
-				dataType : "json",
-				success : function(data) {
-					console.log(data);
-					video.currentTime=data;
-				},
-				error : function() { 
-					console.log("失败");   
-				}  
-			}) 
-			
-			window.onbeforeunload = function(event) {
-				$.ajax({
-					url : "/oss/recordChange",
-					data : {
-						userid:userid,
-						batchId:batchId,
-						coursewareId:coursewareId,
-						viewTime:Math.round(video.currentTime)
-					},
-					type : "post",
-					dataType : "json",
-					success : function(data) {
-
-					},
-					error : function() { 
-						console.log("失败");   
-					}  
-				}) 
-			
-			}
-		}); 
-		video.addEventListener('pause', function() {
-			console.log("pause");
-			console.log(video.currentTime);
-			var userid = '<%=session.getAttribute("user_id")%>';
-			var batchId =getQueryString("batchId");
-			$.ajax({
-				url : "/oss/recordChange",
-				data : {
-					userid:userid,
-					batchId:batchId,
-					coursewareId:coursewareId,
-					viewTime:Math.round(video.currentTime)
-				},
-				type : "post",
-				dataType : "json",
-				success : function(data) {
-
-				},
-				error : function() { 
-					console.log("失败");   
-				}  
-			}) 
-		});
-
-	}
-	function mainContentHeightAdjust() {
-		var docHeight = jQuery(document).height();
-		if (docHeight > jQuery('.main-content').height())
-			jQuery('.main-content').height(docHeight);
-	}
-	function visibleSubMenuClose() {
-		jQuery('.menu-list').each(function() {
-			var t = jQuery(this);
-			if (t.hasClass('nav-active')) {
-				t.find('> ul').slideUp(200, function() {
-					t.removeClass('nav-active');
-				});
-			}
-		});
-	}
-
-	function getQueryString(name) {
-		var result = window.location.search.match(new RegExp("[\?\&]" + name
-				+ "=([^\&]+)", "i"));
-		if (result == null || result.length < 1) {
-			return "";
 		}
-		return result[1];
-	}
+	})
+	   function mainContentHeightAdjust() {
+      var docHeight = jQuery(document).height();
+      if(docHeight > jQuery('.main-content').height())
+         jQuery('.main-content').height(docHeight);
+   }
+		   function visibleSubMenuClose() {
+		      jQuery('.menu-list').each(function() {
+		         var t = jQuery(this);
+		         if(t.hasClass('nav-active')) {
+		            t.find('> ul').slideUp(200, function(){
+		               t.removeClass('nav-active');
+		            });
+		         }
+		      });
+		   }
 </script>
 
 </head>
@@ -316,51 +190,79 @@
 		<!-- header section end-->
 
 		<!-- page heading start-->
-		<div class="page-heading"><h3>课程课件</h3></div>
+		<div class="page-heading">学习记录查看</div>
 		<!-- page heading end-->
 
 		<!--body wrapper start-->
 		<div class="wrapper">
-
-
-
-
-			<div class="row">
-				<div class="col-md-10">  
-					<div class="square-widget">
-						<div class="widget-container">   
-							<div class="stepy-tab"></div> 
-							<form id="default" class="form-horizontal">
-								<fieldset title="Initial Info">
-									<legend>选择课件</legend>
-									<div class="panel-body">
-										<div id="gallery" class="media-gal isotope"
-											style="position: relative; overflow: hidden; height: 749.297px;">
-										</div>
-									</div>  
-								</fieldset>  
-								<fieldset title="Contact Info"> 
-									<legend>课件学习</legend>
-									<center id="ccenter">
-										</center>
-								</fieldset>
- 
-								<button class="btn btn-info finish">Finish</button>
-							</form> 
-						</div>
-					</div> 
-				</div>
-			</div>
-
- 
- 
-			<!--body wrapper end-->
+		
+		
+		<table border="1" style="text-align:center;margin-left:30px"> 
+					<strong>按课程编号搜索：</strong>
+						<form action="RecordTable" method="get" class="form-search"> 
+							<input class="input-medium search-query" name="queryCondition" 
+								value="${page.queryCondition}" id="condition" type="text">
+							<button class="btn btn-info" type="submit">查询</button>
+						</form>
+					</table> 
+	 			<section class="panel">
+                    <header class="panel-heading">
+                       课程信息表
+                            <span class="tools pull-right">
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                             </span>
+                    </header>
+                    <div class="panel-body" id="upanel">
+                        <table class="table table-striped">
+                            <thead> 
+                            <tr>
+                                <th>学习编号</th>
+                                <th>批次名</th>
+                                <th>课程名称</th>
+                                <th>课件名</th>
+                                <th>学习次数</th>
+                                <th>学习时间</th>
+                            </tr>
+                            </thead> 
+                            <tbody>
+                            <c:forEach items="${record_Joins}" var="s">
+                            <c:if test="${s.userId==user_id}">
+                            <tr>
+								<td>${s.recordId}</td>
+								<td>${s.batchName}</td>
+								<td>${s.courseName}</td>
+								<td>${s.coursewareName}</td>
+								<td>${s.studyTimes}</td>
+								<td>${s.viewTime}</td>        
+                            </tr>
+                            </c:if>
+                            </c:forEach>
+                          
+                            </tbody>
+                        </table>
+                    </div>
+					<center>  
+						<label>第${page.currentPage}/${page.totalPage}页
+							共${page.totalRows}条</label> <a href="RecordTable?currentPage=0">首页</a> <a
+							href="RecordTable?currentPage=${page.currentPage-1}" 
+							onclick="return checkFirst()">上一页</a> <a 
+							href="RecordTable?currentPage=${page.currentPage+1}"
+							onclick="return checkNext()">下一页</a> <a
+							href="RecordTable?currentPage=${page.totalPage}">尾页</a> 跳转到: <input
+							type="text" style="width:30px" id="turnPage" />页 <button 
+							class="btn"  onclick="startTurn()">跳转</button> 
+					</center>
+                </section>
+		
+		
+		</div>
+		<!--body wrapper end-->
 
 		<!--footer section start-->
 		<footer class="sticky-footer"> </footer>
 		<!--footer section end-->
- 
- 
+
+
 	</div>
 	<!-- main content end--> </section>
 
@@ -373,15 +275,48 @@
 
 
 	<script src="/oss/plugin/script/scripts.js"></script>
-<script>
-    /*=====STEPY WIZARD====*/
-    $(function() {
-        $('#default').stepy({
-            block: true,
-            titleClick: true,
-            titleTarget: '.stepy-tab'
-        });
-    });
-    </script>
+<script type="text/javascript">
+    
+    function checkFirst(){
+         if(${page.currentPage>1}){
+         
+           return true;
+         
+         }
+         alert("已到页首,无法加载更多");
+        
+       return false;
+    }
+    
+    function checkNext(){
+    
+    if(${page.currentPage<page.totalPage}){
+    
+      return true;
+    
+    }
+    alert("已到页尾，无法加载更多页");
+    return false;
+    
+    }
+     
+    
+    function startTurn(){
+    
+    var turnPage=document.getElementById("turnPage").value;
+    
+    if(turnPage>${page.totalPage}){
+    
+      alert("对不起已超过最大页数");
+     
+      return false;
+    
+    }
+    
+    var shref="initt.do?currentPage="+turnPage;
+    
+    window.location.href=shref;
+}
+</script>
 </body>
 </html>

@@ -10,12 +10,8 @@
 <meta name="author" content="ThemeBucket">
 <title>Welcome</title>
 <script src="/oss/plugin/script/jquery-1.10.2.min.js"></script>
-<script src="/oss/plugin/script/video.min.js"></script>
-<script src="/oss/plugin/script/jquery.stepy.js"></script>
 <link href="/oss/plugin/css/style.css" rel="stylesheet">
-<link href="/oss/plugin/css/jquery.stepy.css" rel="stylesheet">
 <link href="/oss/plugin/css/style-responsive.css" rel="stylesheet">
-<link href="/oss/plugin/css/video-js.min.css" rel="stylesheet">
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -83,146 +79,43 @@
 		      } 
 		      return false;
 		   });
-		var data1;
-		$.ajax({
-			url : "/oss/getWare",
-			data : {
-				id : getQueryString("courseId")
-			},
-			type : "post",
-			dataType : "json",
-			success : function(data) {
-				console.log(data);
-				data1=data;
-				$.each(data,function(i,v){
-					$("#gallery").append('<div class="images item"><a class="scourse" href="#"><img id="'+v.coursewareId+'" src="'+v.picPath+'" alt=""></a><p>'+v.coursewareName+'</p></div>')
-				}) 
-				 
-			},
-			error : function() { 
-				console.log("失败");   
-			}  
-		})   
-		var vvideo;
-		$("#gallery").on("click",".scourse",function(){  
-			var ii=Number($(this).children().attr("id")) 
-			$.each(data1,function(i,v){  
-				console.log(v.coursewareId)  
-				if(v.coursewareId==ii){ 
-					$("#ccenter").empty();
-					$("#ccenter").append('<video id="example_video_1" class="video-js vjs-default-skin vjs-big-play-centered"controls preload="none"poster="'+v.picPath+'" data-setup="{}"><source id="ssc" src="'+v.videoPath+'" /> </video>')
-					$("#example_video_1").height($(window).height()*0.8);
-					$("#example_video_1").width($(window).height()*0.8/0.75); 
-					vvideo=document.getElementById("example_video_1");
-					lister(vvideo,v.coursewareId); 
-				}
-				 
-			})  
-			$("#default-title-1").click(); 
-		})  
 		
-
-		} 
-	})
-	$(window).resize(function() {
-		$("#example_video_1").height($(window).height() * 0.8);
-		$("#example_video_1").width($(window).height() * 0.8 / 0.75);
-	});
-	
-	function lister(video,coursewareId) {
-		
-		video.addEventListener('play', function() {
-			console.log("play");
-			var userid = '<%=session.getAttribute("user_id")%>';
-			var batchId =getQueryString("batchId");
+		$("#testDo").on("click",function(){
+			
 			$.ajax({
-				url : "/oss/recordResume",
+				url : "/oss/testQuery",
 				data : {
-					userid:userid,
-					batchId:batchId,
-					coursewareId:coursewareId
 				},
 				type : "post",
 				dataType : "json",
 				success : function(data) {
 					console.log(data);
-					video.currentTime=data;
+					
 				},
-				error : function() { 
-					console.log("失败");   
-				}  
-			}) 
+				error : function() {
+					console.log("失败");
+				}
+			})
 			
-			window.onbeforeunload = function(event) {
-				$.ajax({
-					url : "/oss/recordChange",
-					data : {
-						userid:userid,
-						batchId:batchId,
-						coursewareId:coursewareId,
-						viewTime:Math.round(video.currentTime)
-					},
-					type : "post",
-					dataType : "json",
-					success : function(data) {
-
-					},
-					error : function() { 
-						console.log("失败");   
-					}  
-				}) 
-			
-			}
-		}); 
-		video.addEventListener('pause', function() {
-			console.log("pause");
-			console.log(video.currentTime);
-			var userid = '<%=session.getAttribute("user_id")%>';
-			var batchId =getQueryString("batchId");
-			$.ajax({
-				url : "/oss/recordChange",
-				data : {
-					userid:userid,
-					batchId:batchId,
-					coursewareId:coursewareId,
-					viewTime:Math.round(video.currentTime)
-				},
-				type : "post",
-				dataType : "json",
-				success : function(data) {
-
-				},
-				error : function() { 
-					console.log("失败");   
-				}  
-			}) 
-		});
-
-	}
-	function mainContentHeightAdjust() {
-		var docHeight = jQuery(document).height();
-		if (docHeight > jQuery('.main-content').height())
-			jQuery('.main-content').height(docHeight);
-	}
-	function visibleSubMenuClose() {
-		jQuery('.menu-list').each(function() {
-			var t = jQuery(this);
-			if (t.hasClass('nav-active')) {
-				t.find('> ul').slideUp(200, function() {
-					t.removeClass('nav-active');
-				});
-			}
-		});
-	}
-
-	function getQueryString(name) {
-		var result = window.location.search.match(new RegExp("[\?\&]" + name
-				+ "=([^\&]+)", "i"));
-		if (result == null || result.length < 1) {
-			return "";
+		})
+		
 		}
-		return result[1];
-	}
+	})
+	   function mainContentHeightAdjust() {
+      var docHeight = jQuery(document).height();
+      if(docHeight > jQuery('.main-content').height())
+         jQuery('.main-content').height(docHeight);
+   }
+		   function visibleSubMenuClose() {
+		      jQuery('.menu-list').each(function() {
+		         var t = jQuery(this);
+		         if(t.hasClass('nav-active')) {
+		            t.find('> ul').slideUp(200, function(){
+		               t.removeClass('nav-active');
+		            });
+		         }
+		      });
+		   }
 </script>
 
 </head>
@@ -316,51 +209,33 @@
 		<!-- header section end-->
 
 		<!-- page heading start-->
-		<div class="page-heading"><h3>课程课件</h3></div>
+		<div class="page-heading">考试资格管理</div>
 		<!-- page heading end-->
 
 		<!--body wrapper start-->
 		<div class="wrapper">
 
-
-
-
-			<div class="row">
-				<div class="col-md-10">  
-					<div class="square-widget">
-						<div class="widget-container">   
-							<div class="stepy-tab"></div> 
-							<form id="default" class="form-horizontal">
-								<fieldset title="Initial Info">
-									<legend>选择课件</legend>
-									<div class="panel-body">
-										<div id="gallery" class="media-gal isotope"
-											style="position: relative; overflow: hidden; height: 749.297px;">
-										</div>
-									</div>  
-								</fieldset>  
-								<fieldset title="Contact Info"> 
-									<legend>课件学习</legend>
-									<center id="ccenter">
-										</center>
-								</fieldset>
- 
-								<button class="btn btn-info finish">Finish</button>
-							</form> 
-						</div>
-					</div> 
-				</div>
-			</div>
-
- 
- 
-			<!--body wrapper end-->
+		<div class="col-md-6">
+                    <section class="panel">  
+                        <div class="panel-body">
+                            <p>
+                                <button class="btn btn-success btn-lg btn-block" id="testDo" type="button">考试资格筛查</button>
+                            </p>
+                        </div>
+                    </section>
+                </div>
+		
+		
+		
+		
+		</div>
+		<!--body wrapper end-->
 
 		<!--footer section start-->
 		<footer class="sticky-footer"> </footer>
 		<!--footer section end-->
- 
- 
+
+
 	</div>
 	<!-- main content end--> </section>
 
@@ -373,15 +248,6 @@
 
 
 	<script src="/oss/plugin/script/scripts.js"></script>
-<script>
-    /*=====STEPY WIZARD====*/
-    $(function() {
-        $('#default').stepy({
-            block: true,
-            titleClick: true,
-            titleTarget: '.stepy-tab'
-        });
-    });
-    </script>
+
 </body>
 </html>

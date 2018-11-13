@@ -31,13 +31,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <resultMap id="BaseResultMap5" type="oss.entity.Study_Record" >
+    <id column="record_id" property="recordId" jdbcType="INTEGER" />
+    <result column="batch_id" property="batchId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="courseware_id" property="coursewareId" jdbcType="INTEGER" />
+    <result column="study_times" property="studyTimes" jdbcType="INTEGER" />
+    <result column="is_pass_test" property="isPassTest" jdbcType="INTEGER" />
+    <result column="view_time" property="viewTime" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="BaseResultMap6" type="oss.entity.Record_Join" >
+    <result column="record_id" property="recordId" jdbcType="INTEGER" />
+    <result column="batch_id" property="batchId" jdbcType="INTEGER" />
+    <result column="batch_name" property="batchName" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="courseware_name" property="coursewareName" jdbcType="VARCHAR" />
+    <result column="study_times" property="studyTimes" jdbcType="INTEGER" />
+    <result column="view_time" property="viewTime" jdbcType="VARCHAR" />
+  </resultMap>
     	<select id="searchInvListC" parameterType="oss.entity.Page" resultMap="BaseResultMap">
 		select * from courseware limit #{startRow},#{pageSize}
 	</select>
 
  <select id="searchTotalCountC" parameterType="oss.entity.Page"
         resultType="java.lang.Integer">
-        select count(courseware_id) from courseware <where>
+        select count(courseware_id) from courseware 
+        <where>
             <if test="queryCondition!=null">
                 and courseware_name like CONCAT('%',#{queryCondition},'%')
             </if>
@@ -86,4 +110,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       courseware_text = #{coursewareText}
     where courseware_id = #{coursewareId}
   </update>
+  
+  
+    <insert id="upCurrentTime" parameterType="oss.entity.Study_Record" >
+    insert into study_record (batch_id, user_id, 
+      courseware_id, study_times)
+    values (#{batchId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{coursewareId,jdbcType=INTEGER}, 1)
+  </insert>
+  
+   <update id="upCurrentTime2" parameterType="oss.entity.Study_Record" >
+    update study_record set study_times=study_times+1,view_time=#{viewTime} where record_id=#{recordId};
+  </update>
+  
+   <select id="isRecordExist" parameterType="oss.entity.Study_Record" resultMap="BaseResultMap5">
+    select * from study_record where batch_id=#{batchId} and user_id=#{userId} and courseware_id=#{coursewareId};
+  </select>
+  
+  
+  <select id="searchInvListR" parameterType="oss.entity.Page" resultMap="BaseResultMap6">
+		select * from record_join limit #{startRow},#{pageSize}
+	</select>
+
+ <select id="searchTotalCountR" parameterType="oss.entity.Page"
+        resultType="java.lang.Integer">
+        select count(record_id) from record_join
+        <where>
+            <if test="queryCondition!=null">
+                and course_name like CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+    </select>
+    
+    <select id="getInvBycondtionR" parameterType="oss.entity.Page" resultMap="BaseResultMap6">
+        select * from record_join
+         <where>
+            <if test="queryCondition!=null">
+                 course_name like CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+      </select>
 </mapper>

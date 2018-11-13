@@ -17,7 +17,9 @@ import oss.entity.Batch_CourseKey;
 import oss.entity.Course;
 import oss.entity.Courseware;
 import oss.entity.Page;
+import oss.entity.Record_Join;
 import oss.entity.Study_Batch;
+import oss.entity.Study_Record;
 import oss.entity.User_BatchKey;
 import oss.service.CourseWareService;
 import oss.service.ManageService;
@@ -51,7 +53,6 @@ public String editCourseWare(int id,String name,String text,int select1) {
 		String filename = file.getOriginalFilename();
 		Courseware courseware=new Courseware();
 		courseware.setCoursewareName(filename.substring(0,filename.lastIndexOf(".")));
-		System.out.println(filename);
 		//String path = request.getServletContext().getRealPath("/video/")+ filename;
 		String path = "H:/ossMedia/video/"+ filename;
 		File f = new File(path);
@@ -64,7 +65,6 @@ public String editCourseWare(int id,String name,String text,int select1) {
 		MultimediaObject instance = new MultimediaObject(f);
         try {
 			MultimediaInfo result = instance.getInfo();
-			System.out.println(result.getDuration()/1000);
 			courseware.setVideoTime(Long.toString(result.getDuration()/1000));
 		} catch (EncoderException e) {
 			// TODO Auto-generated catch block
@@ -218,5 +218,122 @@ public String editCourseWare(int id,String name,String text,int select1) {
 		public List<Courseware> getWare(int id) {
 			List<Courseware> coursewares=courseWareService.getCourseWareByCourseId(id);
 			return coursewares;
+		}
+		
+		@RequestMapping(value = "/recordChange", produces = "text/html;charset=UTF-8")
+		@ResponseBody
+		public String recordChange(int userid,int batchId,int coursewareId,String viewTime) {
+		Study_Record study_Record=new Study_Record();
+		study_Record.setBatchId(batchId);
+		study_Record.setCoursewareId(coursewareId);
+		study_Record.setUserId(userid);
+		study_Record.setViewTime(viewTime);
+		Study_Record study_Records=courseWareService.isRecordExist(study_Record);
+				if(study_Records == null) {
+					int i = courseWareService.upCurrentTime(study_Record);
+				}else {
+					study_Record.setRecordId(study_Records.getRecordId());
+					int i = courseWareService.upCurrentTime2(study_Record);
+				}
+			return "1";
+		}
+		
+		@RequestMapping(value = "/recordResume", produces = "text/html;charset=UTF-8")
+		@ResponseBody
+		public String recordResume(int userid,int batchId,int coursewareId) {
+		Study_Record study_Record=new Study_Record();
+		study_Record.setBatchId(batchId);
+		study_Record.setCoursewareId(coursewareId);
+		study_Record.setUserId(userid);
+		Study_Record study_Records=courseWareService.isRecordExist(study_Record);
+				if(study_Records == null) {
+					return "0";
+				}else {
+					return study_Records.getViewTime();
+				}
+		}
+		
+		@RequestMapping("/RecordTableAdmin")
+		public String searchInvListRAdmin(Page page, HttpServletRequest request) throws UnsupportedEncodingException {
+			Page p = page;
+			int pageSize = 5; 
+			p.setPageSize(pageSize);
+			int curPage = p.getCurrentPage();
+
+			if (curPage == 0) {
+				curPage = 1;
+				p.setCurrentPage(curPage);
+			}
+			int startRow = page.getStartRow();
+
+			if (!(p.getCurrentPage() == 0)) {
+				startRow = getStartRowBycurrentPageC(curPage, pageSize);
+			}
+			p.setStartRow(startRow);
+
+			String queryCondition = null;
+			if (page.getQueryCondition() != null) {
+				queryCondition = page.getQueryCondition();
+			}
+			List<Record_Join> record_Joins = getInvListByConditionR(page);
+			Integer totalCounts = courseWareService.searchTotalCountR(page);
+			int totalPages = (totalCounts % pageSize == 0) ? (totalCounts / pageSize) : (totalCounts / pageSize + 1);
+			p.setTotalPage(totalPages);
+			page.setTotalRows(totalCounts);
+			request.setAttribute("record_Joins", record_Joins);
+			request.setAttribute("page", page);
+			return "adminrecord";
+		}
+		
+		@RequestMapping("/RecordTable")
+		public String searchInvListR(Page page, HttpServletRequest request) throws UnsupportedEncodingException {
+			Page p = page;
+			int pageSize = 5; 
+			p.setPageSize(pageSize);
+			int curPage = p.getCurrentPage();
+
+			if (curPage == 0) {
+				curPage = 1;
+				p.setCurrentPage(curPage);
+			}
+			int startRow = page.getStartRow();
+
+			if (!(p.getCurrentPage() == 0)) {
+				startRow = getStartRowBycurrentPageC(curPage, pageSize);
+			}
+			p.setStartRow(startRow);
+
+			String queryCondition = null;
+			if (page.getQueryCondition() != null) {
+				queryCondition = page.getQueryCondition();
+			}
+			List<Record_Join> record_Joins = getInvListByConditionR(page);
+			Integer totalCounts = courseWareService.searchTotalCountR(page);
+			int totalPages = (totalCounts % pageSize == 0) ? (totalCounts / pageSize) : (totalCounts / pageSize + 1);
+			p.setTotalPage(totalPages);
+			page.setTotalRows(totalCounts);
+			request.setAttribute("record_Joins", record_Joins);
+			request.setAttribute("page", page);
+			return "srecord";
+		}
+
+		private List<Record_Join> getInvListByConditionR(Page page) {
+			List<Record_Join> record_Joins = null;
+			if (page.getQueryCondition() == null) {
+				record_Joins = courseWareService.searchInvListR(page);
+				return record_Joins;
+			}
+			record_Joins = courseWareService.getInvBycondtionR(page);
+			return record_Joins;
+		}
+
+
+		public int getStartRowBycurrentPageR(int currentPage, int pageSize) {
+			int startRow = 0;
+			if (currentPage == 1) {
+				return startRow = 0;
+			}
+			startRow = (currentPage - 1) * pageSize;
+			return startRow;
 		}
 }
