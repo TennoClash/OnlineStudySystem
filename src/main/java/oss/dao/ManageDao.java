@@ -2,6 +2,7 @@ package oss.dao;
 
 import java.util.List;
 
+import oss.entity.Batch_CourseKey;
 import oss.entity.Course;
 import oss.entity.Page;
 import oss.entity.Study_Batch;
@@ -43,4 +44,10 @@ public interface ManageDao {
 	public List<Course> getCourse();
 	
 	public List<Course> getCourseByBatch(int id);
+	
+	public List<Course> getCourseByBatch2(int id);
+	
+	public int addBC(List<Batch_CourseKey> batch_CourseKeys);
+	
+	public Course getCourseByString(String param);
 }

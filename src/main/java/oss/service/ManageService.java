@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import oss.dao.ManageDao;
+import oss.entity.Batch_CourseKey;
 import oss.entity.Course;
 import oss.entity.Page;
 import oss.entity.Study_Batch;
@@ -73,5 +74,15 @@ public class ManageService {
 	public List<Course> getCourseByBatch(int id){
 		return manageDao.getCourseByBatch(id);
 	}
+	public List<Course> getCourseByBatch2(int id){
+		return manageDao.getCourseByBatch2(id);
+	}
 	
+	public int addBC(List<Batch_CourseKey> batch_CourseKeys) {
+		return manageDao.addBC(batch_CourseKeys);
+	}
+	
+	public Course getCourseByString(String param){
+		return manageDao.getCourseByString(param);
+	}
 }

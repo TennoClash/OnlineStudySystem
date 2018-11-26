@@ -13,6 +13,8 @@
 <script src="/weiduo/plugin/script/jquery-1.10.2.min.js"></script>
 <link href="/weiduo/plugin/css/style.css" rel="stylesheet">
 <link href="/weiduo/plugin/css/style-responsive.css" rel="stylesheet">
+<link href="/weiduo/plugin/css/jasny-bootstrap.min.css" rel="stylesheet">
+
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -58,23 +60,6 @@
 				console.log("失败");
 			}
 		})
-		
-		$("#addsub").on("click",function(){
-			
-			$.ajax({
-				url : "/weiduo/addClazz",
-				data : $("#addf").serialize(),
-				type : "post",
-				dataType : "json",
-				success : function(data) {
-					window.location.reload();
-				},
-				error : function() {
-					console.log("失败");
-				}
-			})
-		})
-		
 		 jQuery('#menuBar').on("click",".menu-list > a",function() {
 		      
 		      var parent = jQuery(this).parent();
@@ -97,6 +82,36 @@
 		      } 
 		      return false;
 		   });
+		
+		$("#upload_sub").on("click", function() {
+			console.log(jsonobj1);
+			var jsonstr = JSON.stringify(jsonobj1);
+			console.log(jsonstr);
+			$.ajax({
+				type : "POST",
+				url : "/weiduo/testUpload",
+				data : {
+					ListSrt : jsonstr,
+				},
+				dataType : "json",
+				success : function(data) {
+					$("#update-success-alert").remove();
+					$("#update-fail-alert").remove();
+					var $updatesuc = $("<div class='alert alert-success' id='update-success-alert' style='margin:0px 0px 0px 30px;width:25%;display:inline-block;background-color: #70e04b;'><button type='button' class='close' data-dismiss='alert'>×</button> <h4> 操作成功! </h4> 成功插入" + data + "条数据" + " </div>")
+					$("#box1").after($updatesuc);
+				},
+				error : function(data) {
+					$("#update-success-alert").remove();
+					$("#update-fail-alert").remove();
+					var $updatefail = $("<div class='alert alert-fail' id='update-fail-alert' style='margin:0px 0px 0px 30px;width:25%;display:inline-block;background-color: #ffafaf;'><button type='button' class='close' data-dismiss='alert'>×</button> <h4> 操作失败! </h4> 插入失败</div>")
+					$("#box1").after($updatefail);
+				}
+			});
+
+		})
+		
+		
+		
 		}
 	})
 	   function mainContentHeightAdjust() {
@@ -189,7 +204,7 @@
 					<li><a href="#"
 						class="btn btn-default dropdown-toggle info-number"
 						data-toggle="dropdown"> <i class="fa fa-bell-o"></i>
-					</a></li>
+					</a></li> 
 					<li>Hello!<a href="#" class="btn btn-default dropdown-toggle"
 						data-toggle="dropdown" id="account_name"> John Doe <span class="caret"></span>
 					</a>
@@ -198,98 +213,93 @@
 							<li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
 							<li><a href="logout"><i class="fa fa-sign-out"></i> Log Out</a></li>
 						</ul></li>
-
-				</ul>
+ 
+				</ul>  
 			</div>
 			<!--notification menu end -->
 
-		</div> 
+		</div>
 		<!-- header section end-->
- 
+
 		<!-- page heading start-->
-		<div class="page-heading">课程管理</div>  
-		<!-- page heading end--> 
-  
-		<!--body wrapper start--> 
+		<div class="page-heading">Page Tittle goes here</div>
+		<!-- page heading end-->
+
+		<!--body wrapper start-->
 		<div class="wrapper">
-				     
-				  <header class="panel-heading">添加课程</header>
-				<div class="panel-body">  
-				    <form id="addf" role="form">  
-							<div class="col-md-2 form-group">
-                                <input type="text" class="form-control" name="courseName" placeholder="课程名">
-                            </div>
-                            <div class="col-md-2 form-group">
-                                <input type="text" class="form-control" name="courseCode" placeholder="课程编号">
-                            </div>
-                            <div class="col-md-4 form-group"> 
-                                <input type="text" class="form-control" name="courseText" placeholder="课程说明">
-                            </div>
-                            </form>
-				<button class="btn btn-success" id="addsub" type="submit">添加</button>
+<div id="demo"></div>  
+	<div id="box1" style="margin-top:25px;display:inline-block">
+					选择excel文件
+					<div class="fileinput fileinput-new" data-provides="fileinput">
+						<span class="btn btn-default btn-file"><span
+							class="fileinput-new">Select file</span><span
+							class="fileinput-exists">Change</span><input type="file"
+							onchange="importf(this)" name="..."></span> <span
+							class="fileinput-filename"></span> <a href="#"
+							class="close fileinput-exists" data-dismiss="fileinput"
+							style="float: none">&times;</a>
+					</div>
+					<button type="button" id="upload_sub" class="btn">上传</button>
 				</div>
-				<header class="panel-heading"></header>
-				<table border="1" style="text-align:center;margin-left:30px"> 
-					<strong>按课程编号搜索：</strong>
-						<form action="clazzTable" method="get" class="form-search"> 
-							<input class="input-medium search-query" name="queryCondition" 
-								value="${page.queryCondition}" id="condition" type="text">
-							<button class="btn btn-info" type="submit">查询</button>
-						</form>
-					</table> 
-	 			<section class="panel">
-                    <header class="panel-heading">
-                       课程信息表
-                            <span class="tools pull-right">
-                                <a href="javascript:;" class="fa fa-chevron-down"></a>
-                             </span>
-                    </header>
-                    <div class="panel-body" id="upanel">
-                        <table class="table table-striped">
-                            <thead> 
-                            <tr>
-                                <th>课程名</th>
-                                <th>课程代码</th>
-                                <th>课程说明</th>
-                                <th>课程状态</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach items="${courses}" var="c">
-                            <tr>
-                                <td>${c.courseName}</td>
-                                <td>${c.courseCode}</td>
-                                <td>${c.courseText}</td>
-                                <td>  <c:if test="${c.courseState=='0' }">
-      							关闭
-   								</c:if><c:if test="${c.courseState=='1' }">
-      							开启
-   								</c:if>
-   								</td>
-                                
-                               
-                            </tr>
-                            </c:forEach>
-                          
-                            </tbody>
-                        </table>
-                    </div>
-					<center>  
-						<label>第${page.currentPage}/${page.totalPage}页
-							共${page.totalRows}条</label> <a href="clazzTable?currentPage=0">首页</a> <a
-							href="clazzTable?currentPage=${page.currentPage-1}" 
-							onclick="return checkFirst()">上一页</a> <a 
-							href="clazzTable?currentPage=${page.currentPage+1}"
-							onclick="return checkNext()">下一页</a> <a
-							href="clazzTable?currentPage=${page.totalPage}">尾页</a> 跳转到: <input
-							type="text" style="width:30px" id="turnPage" />页 <button
-							class="btn"  onclick="startTurn()">跳转</button>
-					</center>
-                </section>
+
+
+<div>
+	<table border="1" style="text-align: center; margin-left: 30px">
+				<strong>按批次搜索：</strong>
+				<form action="testTable" method="get" class="form-search">
+					<input class="input-medium search-query" name="queryCondition"
+						value="${page.queryCondition}" id="condition" type="text">
+					<button class="btn btn-info" type="submit">查询</button>
+				</form>
+			</table>
+			</div> 
+			<section class="panel"> <header class="panel-heading">
+			课程信息表 <span class="tools pull-right"> <a href="javascript:;"
+				class="fa fa-chevron-down"></a>
+			</span> </header>
+			<div class="panel-body" id="upanel">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>批次名</th>
+							<th>真实姓名</th>
+							<th>用户名</th>
+							<th>课程名</th>
+							<th>分数</th>
+							<th>考试时间</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${test_Tables}" var="s">
+							<tr>
+								<td>${s.batchName}</td>
+								<td>${s.realName}</td>
+								<td>${s.userName}</td>
+								<td>${s.courseName}</td>
+								<td>${s.score}</td>
+								<td>${s.testTime}</td>
+							</tr>
+						</c:forEach>
+
+					</tbody>
+				</table>
+			</div>
+			<center>
+				<label>第${page.currentPage}/${page.totalPage}页
+					共${page.totalRows}条</label> <a href="testTable?currentPage=0">首页</a> <a
+					href="testTable?currentPage=${page.currentPage-1}"
+					onclick="return checkFirst()">上一页</a> <a
+					href="testTable?currentPage=${page.currentPage+1}"
+					onclick="return checkNext()">下一页</a> <a
+					href="testTable?currentPage=${page.totalPage}">尾页</a> 跳转到: <input
+					type="text" style="width: 30px" id="turnPage" />页
+				<button class="btn" onclick="startTurn()">跳转</button>
+			</center>
+			</section>
 
 
 
-</div>
+			</div>
 		<!--body wrapper end-->
 
 		<!--footer section start-->
@@ -306,50 +316,90 @@
 	<script src="/weiduo/plugin/script/bootstrap.min.js"></script>
 	<script src="/weiduo/plugin/script/modernizr.min.js"></script>
 	<script src="/weiduo/plugin/script/jquery.nicescroll.js"></script>
-
+	<script src="/weiduo/plugin/script/xlsx.full.min.js"></script>
+<script src="/weiduo/plugin/script/jasny-bootstrap.min.js"></script>
 
 	<script src="/weiduo/plugin/script/scripts.js"></script>
-	<script type="text/javascript">
-    
-    function checkFirst(){
-         if(${page.currentPage>1}){
-         
-           return true;
-         
-         }
-         alert("已到页首,无法加载更多");
-        
-       return false;
-    }
-    
-    function checkNext(){
-    
-    if(${page.currentPage<page.totalPage}){
-    
-      return true;
-    
-    }
-    alert("已到页尾，无法加载更多页");
-    return false;
-    
-    }
+<script>
+var wb;
+var rABS = false;
+var jsonobj1;
+function importf(obj) {
+	if (!obj.files) {
+		return;
+	}
+	var f = obj.files[0];
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var data = e.target.result;
+		if (rABS) {
+			wb = XLSX.read(btoa(fixdata(data)), {
+				type : 'base64'
+			});
+		} else {
+			wb = XLSX.read(data, {
+				type : 'binary'
+			});
+		}
+		document.getElementById("demo").innerHTML = JSON.stringify(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]));
+		jsonobj1 = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+	};
+	if (rABS) {
+		reader.readAsArrayBuffer(f);
+	} else {
+		reader.readAsBinaryString(f);
+	}
+}
+
+function fixdata(data) {
+	var o = "",
+		l = 0,
+		w = 10240;
+	for (; l < data.byteLength / w; ++l) o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w, l * w + w)));
+	o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)));
+	return o;
+}
+
+
+function checkFirst(){
+     if(${page.currentPage>1}){
      
-    
-    function startTurn(){
-    
-    var turnPage=document.getElementById("turnPage").value;
-    
-    if(turnPage>${page.totalPage}){
-    
-      alert("对不起已超过最大页数");
+       return true;
      
-      return false;
+     }
+     alert("已到页首,无法加载更多");
     
-    }
-    
-    var shref="initt.do?currentPage="+turnPage;
-    
-    window.location.href=shref;
+   return false;
+}
+
+function checkNext(){
+
+if(${page.currentPage<page.totalPage}){
+
+  return true;
+
+}
+alert("已到页尾，无法加载更多页");
+return false;
+
+}
+ 
+
+function startTurn(){
+
+var turnPage=document.getElementById("turnPage").value;
+
+if(turnPage>${page.totalPage}){
+
+  alert("对不起已超过最大页数");
+ 
+  return false;
+
+}
+
+var shref="initt.do?currentPage="+turnPage;
+
+window.location.href=shref;
 }
 </script>
 </body>

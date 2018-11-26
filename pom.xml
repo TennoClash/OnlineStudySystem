@@ -1,17 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com</groupId>
-  <artifactId>oss</artifactId>
-  <packaging>war</packaging>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>oss Maven Webapp</name>
-  <url>http://maven.apache.org</url>
- <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com</groupId>
+	<artifactId>weiduo</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>oss Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -131,24 +132,34 @@
 			<version>1.1.2</version>
 		</dependency>
 		<dependency>
-    <groupId>commons-codec</groupId>
-    <artifactId>commons-codec</artifactId>
-    <version>1.10</version>
-</dependency>
-<dependency>
-    <groupId>ws.schild</groupId>
-    <artifactId>jave-all-deps</artifactId>
-    <version>2.4.0</version>
-</dependency>
-<dependency>
-    <groupId>org.bytedeco</groupId>
-    <artifactId>javacv</artifactId>
-    <version>0.8</version>
-</dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.10</version>
+		</dependency>
+		<dependency>
+			<groupId>ws.schild</groupId>
+			<artifactId>jave-native-win64</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>ws.schild</groupId>
+			<artifactId>jave-core</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacv</artifactId>
+			<version>0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>4.0.0</version>
+		</dependency>
 	</dependencies>
-  <build>
-    <finalName>oss</finalName>
-    <resources>
+	<build>
+		<finalName>weiduo</finalName>
+		<resources>
 			<resource>
 				<directory>src/main/java</directory>
 				<includes>
@@ -166,5 +177,36 @@
 				<filtering>false</filtering>
 			</resource>
 		</resources>
-  </build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.0.0</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.5.2</version>
+			</plugin>
+
+			<!-- 这里配置自动发布到tomcat下的关键插件 -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<!-- 配置tomcat的上传地址，管理员的用户名和密码，需跟tomcat-user.xml里一致 -->
+				<configuration>
+					<server>tomcat-7.0.68</server>
+					<!-- 注意这个url适用于tomcat7,其他版本可能不同，请自行网上查资料 -->
+					<url>http://10.254.1.11/manager/text</url>
+					<!-- 设置Tomcat的访问uri的编码解决get请求中文乱码问题 -->
+					<uriEncoding>UTF-8</uriEncoding>
+					<username>admin</username>
+					<password>java03</password>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

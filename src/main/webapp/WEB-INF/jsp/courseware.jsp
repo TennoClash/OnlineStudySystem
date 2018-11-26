@@ -11,33 +11,33 @@
 <meta name="description" content="">
 <meta name="author" content="ThemeBucket">
 <title>Welcome</title>
-<script src="/oss/plugin/script/jquery-1.10.2.min.js"></script>
-	<script src="/oss/plugin/script/dropzone/dropzone.js"></script>
-<link href="/oss/plugin/css/style.css" rel="stylesheet">
-	<script src="/oss/plugin/script/bootstrap.min.js"></script> 
-	<script src="/oss/plugin/script/bootstrap-select.js"></script>
-<link href="/oss/plugin/css/style-responsive.css" rel="stylesheet">
-<link href="/oss/plugin/css/bootstrap-select.min.css" rel="stylesheet">
-<link href="/oss/plugin/script/dropzone/css/dropzone.css" rel="stylesheet"/>
+<script src="/weiduo/plugin/script/jquery-1.10.2.min.js"></script>
+	<script src="/weiduo/plugin/script/dropzone/dropzone.js"></script>
+<link href="/weiduo/plugin/css/style.css" rel="stylesheet">
+	<script src="/weiduo/plugin/script/bootstrap.min.js"></script> 
+	<script src="/weiduo/plugin/script/bootstrap-select.js"></script>
+<link href="/weiduo/plugin/css/style-responsive.css" rel="stylesheet">
+<link href="/weiduo/plugin/css/bootstrap-select.min.css" rel="stylesheet">
+<link href="/weiduo/plugin/script/dropzone/css/dropzone.css" rel="stylesheet"/>
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
-  <script src="/oss/plugin/script/html5shiv.js"></script>
-  <script src="/oss/plugin/script/respond.min.js"></script>
+  <script src="/weiduo/plugin/script/html5shiv.js"></script>
+  <script src="/weiduo/plugin/script/respond.min.js"></script>
   <![endif]-->
 
 <script>
 	$(document).ready(function() {
 		if(!<%=session.getAttribute("role_id")%>){
 			alert("登录信息过期，请登录");
-			location.href = "/oss/login"
+			location.href = "/weiduo/login"
 		}else{
 		var role_id = '<%=session.getAttribute("role_id")%>';
 		var account_name = '<%=session.getAttribute("account_name")%>' ;
 		$("#account_name").html(account_name+'<span class="caret"></span>');
 		$("#account_name2").html(account_name+'<span class="caret"></span>');
 		$.ajax({
-			url : "/oss/menux",
+			url : "/weiduo/menux",
 			data : {
 				i : role_id
 			},
@@ -90,7 +90,7 @@
 		 
 		$(".edit").on("click",function(){  
 			$.ajax({
-				url : "/oss/getClazz",
+				url : "/weiduo/getClazz",
 				data : {
 				},  
 				type : "post",
@@ -119,7 +119,7 @@
 		
 		$("#add2sub").on("click",function(){
 			$.ajax({
-				url : "/oss/editCourseWare",
+				url : "/weiduo/editCourseWare",
 				data : {
 					id:$("#u10").val().trim(),
 					name:$("#u1").val().trim(),
@@ -163,11 +163,11 @@
 
 		<!--logo and iconic logo start-->
 		<div class="logo">
-			<a href="welcome"><img src="/oss/img/logo.png" alt=""></a>
+			<a href="welcome"><img src="/weiduo/img/logo.png" alt=""></a>
 		</div>
 
 		<div class="logo-icon text-center">
-			<a href="welcome"><img src="/oss/img/logo_icon.png" alt=""></a>
+			<a href="welcome"><img src="/weiduo/img/logo_icon.png" alt=""></a>
 		</div>
 		<!--logo and iconic logo end-->
 
@@ -390,15 +390,15 @@
 	<!-- main content end--> </section>
 
 
-	<script src="/oss/plugin/script/jquery-ui-1.9.2.custom.min.js"></script>
-	<script src="/oss/plugin/script/jquery-migrate-1.2.1.min.js"></script>
-	<script src="/oss/plugin/script/modernizr.min.js"></script>
-	<script src="/oss/plugin/script/jquery.nicescroll.js"></script>
+	<script src="/weiduo/plugin/script/jquery-ui-1.9.2.custom.min.js"></script>
+	<script src="/weiduo/plugin/script/jquery-migrate-1.2.1.min.js"></script>
+	<script src="/weiduo/plugin/script/modernizr.min.js"></script>
+	<script src="/weiduo/plugin/script/jquery.nicescroll.js"></script>
 
 
 
 
-	<script src="/oss/plugin/script/scripts.js"></script>
+	<script src="/weiduo/plugin/script/scripts.js"></script>
 	<script type="text/javascript">
     
     function checkFirst(){

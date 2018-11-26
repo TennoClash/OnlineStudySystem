@@ -3,46 +3,125 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="oss.dao.TestDao">
-  <resultMap id="BaseResultMap" type="oss.entity.Courseware" >
-    <id column="courseware_id" property="coursewareId" jdbcType="INTEGER" />
-    <result column="course_id" property="courseId" jdbcType="INTEGER" />
-    <result column="courseware_name" property="coursewareName" jdbcType="VARCHAR" />
-    <result column="courseware_text" property="coursewareText" jdbcType="VARCHAR" />
-    <result column="video_path" property="videoPath" jdbcType="VARCHAR" />
-    <result column="pic_path" property="picPath" jdbcType="VARCHAR" />
-    <result column="video_time" property="videoTime" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <resultMap id="BaseResultMap2" type="oss.entity.Study_Record" >
-    <id column="record_id" property="recordId" jdbcType="INTEGER" />
-    <result column="batch_id" property="batchId" jdbcType="INTEGER" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="courseware_id" property="coursewareId" jdbcType="INTEGER" />
-    <result column="study_times" property="studyTimes" jdbcType="INTEGER" />
-    <result column="is_pass_test" property="isPassTest" jdbcType="INTEGER" />
-    <result column="view_time" property="viewTime" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-   <resultMap id="BaseResultMap3" type="oss.entity.Record_Join" >
-    <result column="record_id" property="recordId" jdbcType="INTEGER" />
-    <result column="batch_id" property="batchId" jdbcType="INTEGER" />
-    <result column="batch_name" property="batchName" jdbcType="VARCHAR" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="real_name" property="realName" jdbcType="VARCHAR" />
-    <result column="course_id" property="courseId" jdbcType="INTEGER" />
-    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
-    <result column="courseware_name" property="coursewareName" jdbcType="VARCHAR" />
-    <result column="study_times" property="studyTimes" jdbcType="INTEGER" />
-    <result column="view_time" property="viewTime" jdbcType="VARCHAR" />
-  </resultMap>
-  <select id="queryCourseWare" resultMap="BaseResultMap">
-	select course_id,sum(video_time) video_time from courseware group by course_id;
-	</select>
+	<resultMap id="BaseResultMap" type="oss.entity.Courseware">
+		<id column="courseware_id" property="coursewareId"
+			jdbcType="INTEGER" />
+		<result column="course_id" property="courseId"
+			jdbcType="INTEGER" />
+		<result column="courseware_name" property="coursewareName"
+			jdbcType="VARCHAR" />
+		<result column="courseware_text" property="coursewareText"
+			jdbcType="VARCHAR" />
+		<result column="video_path" property="videoPath"
+			jdbcType="VARCHAR" />
+		<result column="pic_path" property="picPath" jdbcType="VARCHAR" />
+		<result column="video_time" property="videoTime"
+			jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime"
+			jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="oss.entity.Record_Join">
+		<result column="record_id" property="recordId"
+			jdbcType="INTEGER" />
+		<result column="batch_id" property="batchId" jdbcType="INTEGER" />
+		<result column="batch_name" property="batchName"
+			jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="real_name" property="realName"
+			jdbcType="VARCHAR" />
+		<result column="course_id" property="courseId"
+			jdbcType="INTEGER" />
+		<result column="course_name" property="courseName"
+			jdbcType="VARCHAR" />
+		<result column="courseware_name" property="coursewareName"
+			jdbcType="VARCHAR" />
+		<result column="study_times" property="studyTimes"
+			jdbcType="INTEGER" />
+		<result column="view_time" property="viewTime"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BaseResultMap3" type="oss.entity.User_Table">
+		<id column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="user_name" property="userName"
+			jdbcType="VARCHAR" />
+		<result column="password" property="password"
+			jdbcType="VARCHAR" />
+		<result column="real_name" property="realName"
+			jdbcType="VARCHAR" />
+		<result column="age" property="age" jdbcType="INTEGER" />
+		<result column="gender" property="gender" jdbcType="INTEGER" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="user_type" property="userType"
+			jdbcType="INTEGER" />
+		<result column="create_time" property="createTime"
+			jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>	
 	
-	 <select id="queryRecord" resultMap="BaseResultMap3">
-	select course_id,user_id,sum(view_time) view_time from record_join group by course_id,user_id;
+  <resultMap id="BaseResultMap4" type="oss.entity.Test_Join" >
+    <result column="batch_name" property="batchName" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="test_time" property="testTime" jdbcType="VARCHAR" />
+    <result column="test_id" property="TestId" jdbcType="INTEGER" />
+  </resultMap>
+	<select id="queryCourseWare" resultMap="BaseResultMap">
+		select course_id,sum(video_time) video_time from courseware group by
+		course_id;
 	</select>
 
+	<select id="queryRecord" resultMap="BaseResultMap2">
+		select course_id,user_id,sum(view_time) view_time from record_join group by
+		course_id,user_id;
+	</select>
+
+	<select id="queryUserById" resultMap="BaseResultMap3">
+		select * from user_table where user_id in
+		<foreach collection="Id" item="user_id" open="(" close=")"
+			separator=",">
+			#{user_id}
+		</foreach>
+	</select>
+
+	<insert id="insretTest" parameterType="list">
+		replace into test
+		(user_id,batch_id,course_id,score,test_time,test_type) values
+		<foreach collection="list" item="it" separator=",">
+			(#{it.userId},#{it.batchId},#{it.courseId},#{it.score},#{it.testTime},#{it.testType})
+		</foreach>
+	</insert>
+	
+	<!-- 考试资格分页 -->
+	
+	<select id="searchInvListTest" parameterType="oss.entity.Page" resultMap="BaseResultMap4">
+		select * from test_join limit #{startRow},#{pageSize}
+	</select>
+	
+	<select id="findBatch" resultType="int">
+		select batch_id from study_batch where state=1;
+	</select>
+
+ <select id="searchTotalCountTest" parameterType="oss.entity.Page"
+        resultType="java.lang.Integer">
+        select count(test_id) from test_join <where>
+            <if test="queryCondition!=null">
+                and course_name like CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+    </select>
+    
+    <select id="getInvBycondtionTest" parameterType="oss.entity.Page" resultMap="BaseResultMap4">
+        select * from test_join
+         <where>
+            <if test="queryCondition!=null">
+                 course_name like CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+      </select>
 </mapper>

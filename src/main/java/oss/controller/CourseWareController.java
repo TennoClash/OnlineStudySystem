@@ -53,14 +53,15 @@ public String editCourseWare(int id,String name,String text,int select1) {
 		String filename = file.getOriginalFilename();
 		Courseware courseware=new Courseware();
 		courseware.setCoursewareName(filename.substring(0,filename.lastIndexOf(".")));
-		//String path = request.getServletContext().getRealPath("/video/")+ filename;
-		String path = "H:/ossMedia/video/"+ filename;
+		String path2= request.getServletContext().getRealPath("/");
+		//String path = path2.substring(0,3)+"ossMedia/video/"+ filename;
+		String path="f:/upload/video/"+filename;
 		File f = new File(path);
 		if(!f.getParentFile().exists()){
 			f.getParentFile().mkdirs();
 		}
 		file.transferTo(f);
-		courseware.setVideoPath(filename);
+		courseware.setVideoPath("/uploadVideo/"+filename);
 		/* 获取视频信息*/
 		MultimediaObject instance = new MultimediaObject(f);
         try {
@@ -72,9 +73,11 @@ public String editCourseWare(int id,String name,String text,int select1) {
 		} 
         /*获取缩略图*/
         try {
-			//FetchFrame.fetchFrame(path, request.getServletContext().getRealPath("/fetch/")+filename.substring(0,filename.lastIndexOf("."))+".jpg");
-        	FetchFrame.fetchFrame(path, "H:/ossMedia/fetch/"+filename.substring(0,filename.lastIndexOf("."))+".jpg");
-        	courseware.setPicPath(filename.substring(0,filename.lastIndexOf("."))+".jpg");
+			//File file2=new File(path2.substring(0,3)+"ossMedia/fetch/"+filename.substring(0,filename.lastIndexOf("."))+".jpg");
+        	File file2=new File("f:/upload/images/"+filename.substring(0,filename.lastIndexOf("."))+".jpg");
+        		file2.getParentFile().mkdirs();
+        	FetchFrame.fetchFrame(path, "f:/upload/images/"+filename.substring(0,filename.lastIndexOf("."))+".jpg");
+        	courseware.setPicPath("/uploadImages/"+filename.substring(0,filename.lastIndexOf("."))+".jpg");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -212,6 +215,8 @@ public String editCourseWare(int id,String name,String text,int select1) {
 			List<Course> courses=courseWareService.getBatchCourse(bid);
 			return courses;
 		}
+		
+		
 		
 		@RequestMapping(value = "/getWare", produces = "application/json;charset=UTF-8")
 		@ResponseBody

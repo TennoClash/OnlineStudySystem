@@ -9,24 +9,24 @@
 <meta name="description" content="">
 <meta name="author" content="ThemeBucket">
 <title>Welcome</title> 
-<script src="/oss/plugin/script/jsencrypt.min.js"></script>
-<script src="/oss/plugin/script/jquery-1.10.2.min.js"></script>
-<script src="/oss/plugin/script/jquery.treetable.js"></script>
+<script src="/weiduo/plugin/script/jsencrypt.min.js"></script>
+<script src="/weiduo/plugin/script/jquery-1.10.2.min.js"></script>
+<script src="/weiduo/plugin/script/jquery.treetable.js"></script>
 
-<link href="/oss/plugin/css/style.css" rel="stylesheet">
-<link href="/oss/plugin/css/style-responsive.css" rel="stylesheet">
-<link href="/oss/plugin/css/jquery.treetable.theme.default.css" rel="stylesheet">
+<link href="/weiduo/plugin/css/style.css" rel="stylesheet">
+<link href="/weiduo/plugin/css/style-responsive.css" rel="stylesheet">
+<link href="/weiduo/plugin/css/jquery.treetable.theme.default.css" rel="stylesheet">
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
-  <script src="/oss/plugin/script/html5shiv.js"></script>
-  <script src="/oss/plugin/script/respond.min.js"></script>
+  <script src="/weiduo/plugin/script/html5shiv.js"></script>
+  <script src="/weiduo/plugin/script/respond.min.js"></script>
   <![endif]-->
 <script>
 	$(document).ready(function() {
 		if(!<%=session.getAttribute("role_id")%>){
 			alert("登录信息过期，请登录");
-			location.href = "/oss/login"
+			location.href = "/weiduo/login"
 		}else{ 
 		var role_id = '<%=session.getAttribute("role_id")%>';
 		var account_name = '<%=session.getAttribute("account_name")%>' ;
@@ -34,7 +34,7 @@
 		$("#account_name2").html(account_name+'<span class="caret"></span>');
 		var data1;
 		$.ajax({
-			url : "/oss/menux",
+			url : "/weiduo/menux",
 			data : {
 				i : role_id
 			},
@@ -64,7 +64,7 @@
 			}
 		})
 		$.ajax({
-				url : "/oss/menux",
+				url : "/weiduo/menux",
 				data : {
 					i : 1
 				},
@@ -132,7 +132,7 @@
 				var ii=2; 
 			}
 			$.ajax({
-				url : "/oss/menux",
+				url : "/weiduo/menux",
 				data : {
 					i : ii 
 				}, 
@@ -175,7 +175,7 @@
 				var i=2;
 			}
 				$.ajax({ 
-					url : "/oss/menuo",
+					url : "/weiduo/menuo",
 					data : {  
 						i : i 
 					},  
@@ -206,7 +206,7 @@
 		$("#edsub").on("click",function(){
 			var menu=$("#edform").serialize();
 			$.ajax({ 
-					url : "/oss/menuEdit",
+					url : "/weiduo/menuEdit",
 					data : menu,  
 					type : "post",  
 					dataType : "json",    
@@ -231,7 +231,7 @@
 			}
 			var arr1=[];
 			$.ajax({ 
-				url : "/oss/menuo",
+				url : "/weiduo/menuo",
 				data : {  
 					i : i 
 				},  
@@ -243,7 +243,7 @@
 					})
 					var sort=Math.max.apply(null, arr1)
 					$.ajax({ 
-					url : "/oss/menuAdd",
+					url : "/weiduo/menuAdd",
 					data : {
 						sort : sort+1,
 						menuType : i,
@@ -276,7 +276,7 @@
 				var i=2;
 			}
 			$.ajax({ 
-				url : "/oss/menuo",
+				url : "/weiduo/menuo",
 				data : {  
 					i : i 
 				},  
@@ -311,7 +311,7 @@
 				var i=2;
 			}
 			$.ajax({ 
-				url : "/oss/menuAdd2",
+				url : "/weiduo/menuAdd2",
 				data : {
 					pid : pid2,
 					sort : sort2,
@@ -338,7 +338,7 @@
 				var i=2;
 			}
 			$.ajax({
-				url : "/oss/menuDel",
+				url : "/weiduo/menuDel",
 				data : {
 					menuType : i,
 					id : eid
@@ -364,7 +364,7 @@
 			var Enname=encrypt.encrypt(name);
 			var Enpass=encrypt.encrypt(pass);
 			$.ajax({
-				url : "/oss/RSATest",
+				url : "/weiduo/RSATest",
 				data : {
 					Enname : Enname,
 					Enpass : Enpass,
@@ -410,11 +410,11 @@
 
 		<!--logo and iconic logo start-->
 		<div class="logo">
-			<a href="welcome"><img src="/oss/img/logo.png" alt=""></a>
+			<a href="welcome"><img src="/weiduo/img/logo.png" alt=""></a>
 		</div>
 
 		<div class="logo-icon text-center">
-			<a href="welcome"><img src="/oss/img/logo_icon.png" alt=""></a>
+			<a href="welcome"><img src="/weiduo/img/logo_icon.png" alt=""></a>
 		</div>
 		<!--logo and iconic logo end-->
 
@@ -610,14 +610,14 @@
 	<!-- main content end--> </section>
 
 
-	<script src="/oss/plugin/script/jquery-ui-1.9.2.custom.min.js"></script>
-	<script src="/oss/plugin/script/jquery-migrate-1.2.1.min.js"></script>
-	<script src="/oss/plugin/script/bootstrap.min.js"></script>
-	<script src="/oss/plugin/script/modernizr.min.js"></script>
-	<script src="/oss/plugin/script/jquery.nicescroll.js"></script>
+	<script src="/weiduo/plugin/script/jquery-ui-1.9.2.custom.min.js"></script>
+	<script src="/weiduo/plugin/script/jquery-migrate-1.2.1.min.js"></script>
+	<script src="/weiduo/plugin/script/bootstrap.min.js"></script>
+	<script src="/weiduo/plugin/script/modernizr.min.js"></script>
+	<script src="/weiduo/plugin/script/jquery.nicescroll.js"></script>
 
 
-	<script src="/oss/plugin/script/scripts.js"></script>
+	<script src="/weiduo/plugin/script/scripts.js"></script>
 
 </body>
 </html>

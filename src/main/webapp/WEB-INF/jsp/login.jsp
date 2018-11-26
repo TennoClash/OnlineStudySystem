@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="ThemeBucket">
-    <script src="/oss/plugin/script/jquery-1.10.2.min.js"></script>
-    <script src="/oss/plugin/script/md5.js"></script>
-    <link href="/oss/plugin/css/style.css" rel="stylesheet">
-  <link href="/oss/plugin/css/style-responsive.css" rel="stylesheet">
+    <script src="/weiduo/plugin/script/jquery-1.10.2.min.js"></script>
+    <script src="/weiduo/plugin/script/md5.js"></script>
+    <link href="/weiduo/plugin/css/style.css" rel="stylesheet">
+  <link href="/weiduo/plugin/css/style-responsive.css" rel="stylesheet">
 <title>Login</title>
 <script>
 	$(document).ready(function() {
@@ -19,7 +19,7 @@
 			var password=$("#password").val();
 			password =md5(password);
 			if (password != null && username != "" && password != null && username != "") {
-				var url = "/oss/ajax_login";
+				var url = "/weiduo/ajax_login";
 				var param = {
 					name : username,
 					pass : password
@@ -27,7 +27,7 @@
 				$.post(url, param, function(data) {
 					alert(data);
 					if (data != "用户名或密码错误") {
-						location.href = "/oss/welcome"
+						location.href = "/weiduo/welcome"
 					}
 				});
 			}
@@ -72,8 +72,8 @@
 </div>
 
 
-<script src="/oss/plugin/script/bootstrap.min.js"></script>
-<script src="/oss/plugin/script/modernizr.min.js"></script>
+<script src="/weiduo/plugin/script/bootstrap.min.js"></script>
+<script src="/weiduo/plugin/script/modernizr.min.js"></script>
 
 </body>
 </html>

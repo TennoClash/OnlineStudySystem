@@ -6,13 +6,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insert title here</title>
-<script src="/oss/plugin/script/jquery-1.11.3.min.js"></script>
+<script src="/weiduo/plugin/script/jquery-1.11.3.min.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="/oss/plugin/script/jumpres/assets/animate.css">
+	href="/weiduo/plugin/script/jumpres/assets/animate.css">
 <link rel="stylesheet" type="text/css"
-	href="/oss/plugin/script/jumpres/assets/style.css">
+	href="/weiduo/plugin/script/jumpres/assets/style.css">
 <link rel="stylesheet" type="text/css"
-	href="/oss/plugin/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	href="/weiduo/plugin/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 
 </head>
 <body>
@@ -28,14 +28,14 @@
 	<div class="decal"></div>
 	<div class="container fade in"></div>
 	</div>
-	<script src="/oss/plugin/script/jumpres/assets/jquery.fittext.js"></script>
-	<script src="/oss/plugin/script/jumpres/assets/jquery.lettering.js"></script>
-	<script src="/oss/plugin/script/jumpres/assets/jquery.textillate.js"></script>
+	<script src="/weiduo/plugin/script/jumpres/assets/jquery.fittext.js"></script>
+	<script src="/weiduo/plugin/script/jumpres/assets/jquery.lettering.js"></script>
+	<script src="/weiduo/plugin/script/jumpres/assets/jquery.textillate.js"></script>
 	<script>
 		$(function() {
 		var ref = "";
 function consoleLog(){
-    location.href = "/oss/batchTable?currentPage=1"
+    location.href = "/weiduo/batchTable?currentPage=1"
 }
 ref = setInterval(function(){
     consoleLog();

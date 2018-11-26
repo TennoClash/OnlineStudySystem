@@ -155,6 +155,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getCourseByBatch" parameterType="int" resultMap="BaseResultMap4">
         select * from batch_course where batch_id=#{batch_id};
     </select>
+    
+        <select id="getCourseByBatch2" parameterType="int" resultMap="BaseResultMap2">
+        select * from course where course_id in(select course_id from batch_course where batch_id=#{batch_id});
+    </select>
 
+	 <select id="getCourseByString" parameterType="String" resultMap="BaseResultMap2">
+        select * from course where course_name=#{param};
+    </select>
+
+ <insert id ="addBC" parameterType="java.util.List" >
+           insert into batch_course
+           (course_id,batch_id)
+           values
+            <foreach collection ="list" item="it" index="index" separator =",">
+                (
+                #{it.courseId}, #{it.batchId}
+                )
+            </foreach >
+     </insert >
       
 </mapper>

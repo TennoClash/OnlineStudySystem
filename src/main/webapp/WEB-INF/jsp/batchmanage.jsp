@@ -11,34 +11,34 @@
 <meta name="description" content="">
 <meta name="author" content="ThemeBucket"> 
 <title>Welcome</title>
-<script src="/oss/plugin/script/jquery-1.10.2.min.js"></script>
-<link href="/oss/plugin/script/jquery-multi-select/css/multi-select.css"  rel="stylesheet" >
-<link href="/oss/plugin/css/style.css" rel="stylesheet">
-<link href="/oss/plugin/css/style-responsive.css" rel="stylesheet">
-<link href="/oss/plugin/script/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
-<link href="/oss/plugin/script/bootstrap-datepicker/css/datepicker-custom.css" rel="stylesheet">
-<link href="/oss/plugin/script/bootstrap-datetimepicker/css/datetimepicker-custom.css" rel="stylesheet">
-<link href="/oss/plugin/script/bootstrap-timepicker/css/timepicker.css" rel="stylesheet">
+<script src="/weiduo/plugin/script/jquery-1.10.2.min.js"></script>
+<link href="/weiduo/plugin/script/jquery-multi-select/css/multi-select.css"  rel="stylesheet" >
+<link href="/weiduo/plugin/css/style.css" rel="stylesheet">
+<link href="/weiduo/plugin/css/style-responsive.css" rel="stylesheet">
+<link href="/weiduo/plugin/script/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+<link href="/weiduo/plugin/script/bootstrap-datepicker/css/datepicker-custom.css" rel="stylesheet">
+<link href="/weiduo/plugin/script/bootstrap-datetimepicker/css/datetimepicker-custom.css" rel="stylesheet">
+<link href="/weiduo/plugin/script/bootstrap-timepicker/css/timepicker.css" rel="stylesheet">
 
 
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
-  <script src="/oss/plugin/script/html5shiv.js"></script>
-  <script src="/oss/plugin/script/respond.min.js"></script>
+  <script src="/weiduo/plugin/script/html5shiv.js"></script>
+  <script src="/weiduo/plugin/script/respond.min.js"></script>
   <![endif]--> 
 <script>
 	$(document).ready(function() {
 		if(!<%=session.getAttribute("role_id")%>){
 			alert("登录信息过期，请登录");
-			location.href = "/oss/login"
+			location.href = "/weiduo/login"
 		}else{
 		var role_id = '<%=session.getAttribute("role_id")%>';
 		var account_name = '<%=session.getAttribute("account_name")%>' ;
 		$("#account_name").html(account_name+'<span class="caret"></span>');
 		$("#account_name2").html(account_name+'<span class="caret"></span>');
 		$.ajax({
-			url : "/oss/menux",
+			url : "/weiduo/menux",
 			data : {
 				i : role_id
 			},
@@ -75,7 +75,7 @@
 			from=dates[2]+"-"+dates[0]+"-"+dates[1];
 			to=dates2[2]+"-"+dates2[0]+"-"+dates2[1];
 			$.ajax({
-				url : "/oss/addBatch",
+				url : "/weiduo/addBatch",
 				data : {
 					from : from, 
 					to : to,
@@ -116,28 +116,91 @@
 		      return false;
 		   });
 		var clone1=$("#clone1").clone();
+		var dataleft;
+		var thisonclick2;
 		$(".edit").on("click",function(){
-			$("#my_multi_select1").empty()
+			
+			var dataright;
+			var thisonclick=$(this)
+			thisonclick2=thisonclick.parent().parent().children().eq(1).text();
+			$("#my_multi_select1").empty();
+			
 			$.ajax({
-				url : "/oss/getClazz",
+				url : "/weiduo/getCourseByBatchId",
 				data : {
+					id:thisonclick.parent().parent().children().eq(1).text() 
 				},  
 				type : "post",
 				dataType : "json",
-				success : function(data) {
-					console.log(clone1); 
-					$.each(data,function(i,v){
-						
-						$("#my_multi_select1").append('<option value="'+v.courseId+'">'+v.courseName+'</option>')	
-					})
-					$('#my_multi_select1').multiSelect();
+				success : function(data22) { 
+					dataleft=data22;
+					if(data22==null){
+						$("#my_multi_select1").append('<option value="">'+"无课程"+'</option>');	
+					}else{
+						$.each(data22,function(i,v){
+							$("#my_multi_select1").append('<option value="'+v.courseId+'">'+v.courseName+'</option>');	
+						})
+					}
+					
+
+					$('#my_multi_select1').multiSelect('refresh') 
 				},
 				error : function() {
 					console.log("失败");
 				}
 			})
 			
-		})
+			setTimeout(function(){
+　　				$.ajax({
+　　					url : "/weiduo/getselectc",
+  					data : {
+  						id:thisonclick.parent().parent().children().eq(1).text() 
+  					},   
+  					type : "post",
+  					dataType : "json",
+  					success : function(data) { 
+  						console.log(data);
+  						$.each(data,function(i,v){
+  							var eid=v.courseId+"-selection";
+  							var $li='<li class="ms-elem-selection ms-selected" id="'+eid+'" style="display: list-item;"><span>'+v.courseName+'</span></li>'
+  							$(".ms-selection .ms-list").append($li) 
+  						
+  						})   
+  					},
+  					error : function() {
+  						console.log("失败");
+  					}
+  				})
+				},200);
+		}) 
+    
+$("#add2sub").on("click",function(){
+	var selectarr=[];
+	//console.log($(".ms-selectable .ms-list li").html())
+	$(".ms-selectable .ms-list li").each(function(){
+		if($(this).is(":hidden")){
+			selectarr.push($(this).children().html())
+		} 
+	}) 
+	console.log(selectarr)
+	$.ajax({
+　　					url : "/weiduo/addbc",
+  					data : {
+  						data:selectarr,
+  						id:thisonclick2
+  					},   
+  					type : "post",
+  					dataType : "json",
+  					traditional: true,
+  					success : function(data) { 
+  						window.location.reload()
+ 
+  					},
+  					error : function() {
+  						console.log("失败");
+  					}
+  				}) 
+}) 
 
 
 		}
@@ -155,7 +218,7 @@
 		               t.removeClass('nav-active');
 		            });
 		         }
-		      });
+		      }); 
 		   }
 </script>
 
@@ -167,11 +230,11 @@
 
 		<!--logo and iconic logo start-->
 		<div class="logo">
-			<a href="welcome"><img src="/oss/img/logo.png" alt=""></a>
+			<a href="welcome"><img src="/weiduo/img/logo.png" alt=""></a>
 		</div>
 
 		<div class="logo-icon text-center">
-			<a href="welcome"><img src="/oss/img/logo_icon.png" alt=""></a>
+			<a href="welcome"><img src="/weiduo/img/logo_icon.png" alt=""></a>
 		</div>
 		<!--logo and iconic logo end-->
 
@@ -388,22 +451,22 @@
 	<!-- main content end--> </section>
 
 
-	<script src="/oss/plugin/script/jquery-ui-1.9.2.custom.min.js"></script>
-	<script src="/oss/plugin/script/jquery-migrate-1.2.1.min.js"></script>
-	<script src="/oss/plugin/script/bootstrap.min.js"></script>
-	<script src="/oss/plugin/script/modernizr.min.js"></script>
-	<script src="/oss/plugin/script/jquery.nicescroll.js"></script>
+	<script src="/weiduo/plugin/script/jquery-ui-1.9.2.custom.min.js"></script>
+	<script src="/weiduo/plugin/script/jquery-migrate-1.2.1.min.js"></script>
+	<script src="/weiduo/plugin/script/bootstrap.min.js"></script>
+	<script src="/weiduo/plugin/script/modernizr.min.js"></script>
+	<script src="/weiduo/plugin/script/jquery.nicescroll.js"></script>
 	
-	<script src="/oss/plugin/script/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-	<script src="/oss/plugin/script/bootstrap-daterangepicker/daterangepicker.js"></script>
-	<script src="/oss/plugin/script/bootstrap-daterangepicker/moment.min.js"></script>
-	<script src="/oss/plugin/script/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
-	<script src="/oss/plugin/script/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
-	<script src="/oss/plugin/script/jquery-multi-select/js/jquery.multi-select.js"></script>
+	<script src="/weiduo/plugin/script/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+	<script src="/weiduo/plugin/script/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<script src="/weiduo/plugin/script/bootstrap-daterangepicker/moment.min.js"></script>
+	<script src="/weiduo/plugin/script/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+	<script src="/weiduo/plugin/script/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+	<script src="/weiduo/plugin/script/jquery-multi-select/js/jquery.multi-select.js"></script>
 	 
 
-	<script src="/oss/plugin/script/pickers-init.js"></script>
-	<script src="/oss/plugin/script/scripts.js"></script>
+	<script src="/weiduo/plugin/script/pickers-init.js"></script>
+	<script src="/weiduo/plugin/script/scripts.js"></script>
 	<script type="text/javascript">
     
     function checkFirst(){

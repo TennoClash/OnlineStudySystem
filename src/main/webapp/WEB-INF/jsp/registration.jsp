@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="ThemeBucket">
-    <script src="/oss/plugin/script/jquery-1.10.2.min.js"></script>
-    <script src="/oss/plugin/script/md5.js"></script>
-    <link href="/oss/plugin/css/style.css" rel="stylesheet">
-  <link href="/oss/plugin/css/style-responsive.css" rel="stylesheet">
+    <script src="/weiduo/plugin/script/jquery-1.10.2.min.js"></script>
+    <script src="/weiduo/plugin/script/md5.js"></script>
+    <link href="/weiduo/plugin/css/style.css" rel="stylesheet">
+  <link href="/weiduo/plugin/css/style-responsive.css" rel="stylesheet">
 <title>registration</title>
 <script>
 	$(document).ready(function() {
@@ -34,12 +34,12 @@
 			
 			
 			$.ajax({
-				url:"/oss/ajax_registration",
+				url:"/weiduo/ajax_registration",
 				data:reg,
 				type:"post",
 				dataType:"json",
 				success:function(data){
-					location.href = "/oss/jump/jumplogin"
+					location.href = "/weiduo/jump/jumplogin"
 				},
 				error:function(){
 					console.log("失败");
@@ -90,7 +90,7 @@
 
             <div class="registration">
                 	已经有账号了？
-                <a href="/oss/login" class="">
+                <a href="/weiduo/login" class="">
                     	登录
                 </a>
             </div>
@@ -102,8 +102,8 @@
 </div>
 
 
-<script src="/oss/plugin/script/bootstrap.min.js"></script>
-<script src="/oss/plugin/script/modernizr.min.js"></script>
+<script src="/weiduo/plugin/script/bootstrap.min.js"></script>
+<script src="/weiduo/plugin/script/modernizr.min.js"></script>
 
 </body>
 </html>
